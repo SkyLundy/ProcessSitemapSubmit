@@ -1,0 +1,11 @@
+{
+  "title": "Sitemap Submit",
+  "version": "2.0",
+  "href": "https://github.com/SkyLundy/SitemapSubmit",
+  "icon": "search",
+  "summary": "Automatically submits the site's sitemap.xml (if it exists) to Google and Bing when changes are made to pages that update the sitemap.",
+  "autoload": true,
+  "singular": true,
+  "permanent": false,
+  "requires": "ProcessWire>=3.0.16, PHP>=7.1.0"
+}
