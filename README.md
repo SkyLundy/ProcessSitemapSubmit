@@ -1,4 +1,5 @@
 # ProcessWire Auto Sitemap Submit Module
+**This module is still in development is incomplete. Please wait for a formal release before using.**
 This module tracks changes to pages that have an effect on a website's sitemap and then notifies
 (pings) search engines. These events include:
 
