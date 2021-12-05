@@ -33,9 +33,8 @@ class ProcessSitemapSubmit extends Wire implements Module {
    * @var array
    */
   private $searchEngines = [
-    'Test' => 'http://renovaenergy.ngrok.io/processwire/test/sitemaps/?sitemap=%{SITEMAP_URL}'
-    // 'Google' => 'https://www.google.com/ping?sitemap=%{SITEMAP_URL}',
-    // 'Bing' => 'https://www.bing.com/webmaster/ping.aspx?siteMap=%{SITEMAP_URL}'
+    'Google' => 'https://www.google.com/ping?sitemap=%{SITEMAP_URL}',
+    'Bing' => 'https://www.bing.com/webmaster/ping.aspx?siteMap=%{SITEMAP_URL}'
   ];
 
   /**
