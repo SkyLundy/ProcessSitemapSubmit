@@ -155,7 +155,7 @@ class ProcessSitemapSubmit extends Wire implements Module {
     $success = $requestStatus === $expectedStatus;
 
     // Translate in case needed
-    $errorMsg = sprintf(__("Expected HTTP %1$s but received %2$s"), $expectedStatus, $requestStatus);
+    $errorMsg = sprintf(__('Expected HTTP %1$d but received %2$d'), $expectedStatus, $requestStatus);
 
     return (object) [
       'success' => $success,
@@ -172,7 +172,7 @@ class ProcessSitemapSubmit extends Wire implements Module {
    */
   private function noSitemapError(Page $page): void {
     if ($this->sitemap_show_warning_if_not_submitted) {
-      $msg = sprintf(__("%s does not exist. Sitemap was not submitted to search engines."), $this->sitemap_location_url);
+      $msg = sprintf(__('%s does not exist. Sitemap was not submitted to search engines.'), $this->sitemap_location_url);
 
       $this->warning($msg);
     }

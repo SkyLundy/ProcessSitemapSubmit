@@ -49,7 +49,7 @@ class ProcessSitemapSubmitConfig extends ModuleConfig {
     // Sitemap URL //
     /////////////////
 
-    $url = $this->modules->get('InputfieldUrl');
+    $url = $this->modules->get('InputfieldText');
     $url->name = 'sitemap_location_url';
     $url->label = __('Sitemap URL');
     $url->description = __('Sitemap URL is validated if changed when module configuration is saved.');
@@ -82,7 +82,7 @@ class ProcessSitemapSubmitConfig extends ModuleConfig {
 
     // Set default if the URL field is empty
     if (!$configuredUrl) {
-      $moduleConfig['sitemap_location_url'] = $defaultSitemapUrl;
+      $moduleConfig['sitemap_location_url'] = $this->getDefaultSitemapUrl();
     }
 
     // Will be set if the URL is checked and there are errors
@@ -90,7 +90,7 @@ class ProcessSitemapSubmitConfig extends ModuleConfig {
 
     // If a new URL is set and it's different than the last URL, then check it.
     // Prevents the module from checking the URL if no changes have been made
-    if ($moduleConfig['sitemap_location_url'] !== $moduleConfig['sitemap_last_url']) {
+    if ($moduleConfig['sitemap_location_url'] !== $this->sitemap_last_url) {
       // Validate URL string
       $urlFormatValid = $configuredUrl ? filter_var($configuredUrl, FILTER_VALIDATE_URL) : false;
 
