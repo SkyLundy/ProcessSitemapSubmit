@@ -70,7 +70,7 @@ class ProcessSitemapSubmitConfig extends ModuleConfig {
     // Show errors if validation or ping fails
 
     // Get currently configured sitemap URL
-    $configuredUrl = $moduleConfig['sitemap_location_url'];
+    $configuredUrl = $this->sitemap_location_url;
 
     // Pass config data to JS
     $this->config->js('sitemapSubmit', [
@@ -90,7 +90,7 @@ class ProcessSitemapSubmitConfig extends ModuleConfig {
 
     // If a new URL is set and it's different than the last URL, then check it.
     // Prevents the module from checking the URL if no changes have been made
-    if ($moduleConfig['sitemap_location_url'] !== $this->sitemap_last_url) {
+    if ($this->sitemap_location_url !== $this->sitemap_last_url) {
       // Validate URL string
       $urlFormatValid = $configuredUrl ? filter_var($configuredUrl, FILTER_VALIDATE_URL) : false;
 
@@ -191,6 +191,7 @@ class ProcessSitemapSubmitConfig extends ModuleConfig {
       $checkbox->name = 'sitemap_module_clear_cache_on_save';
       $checkbox->label = __('Clear Sitemap Cache');
       $checkbox->description = __('MarkupSitemap generates sitemaps and caches the document. To ensure that the changes to pages are seen by search engines, leave this option checked so that the sitemap is regenerated when changes in ProcessWire occur.');
+      $checkbox->notes = __('Module detected: MarkupSitemap');
       $checkbox->icon = 'bomb';
       $checkbox->columnWidth = 50;
 
