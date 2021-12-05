@@ -150,7 +150,7 @@ class ProcessSitemapSubmit extends Wire implements Module {
    */
   public function pingUrl(string $url, int $expectedStatus = 200): object {
     $http = new WireHttp;
-    $request = $http->get($url);
+    $request = $http->get($url, [], ['use' => 'curl']);
     $requestStatus = $http->getHttpCode();
     $success = $requestStatus === $expectedStatus;
 
