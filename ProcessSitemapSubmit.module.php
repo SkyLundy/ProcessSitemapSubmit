@@ -88,7 +88,6 @@ class ProcessSitemapSubmit extends Wire implements Module {
    * @return void
    */
   public function pushSitemap(HookEvent $e): void {
-
     if ($this->sitemap_url_exists) {
       $this->pushSitemapXml($e->arguments('page'));
     }
@@ -198,9 +197,7 @@ class ProcessSitemapSubmit extends Wire implements Module {
     if ($markupSitemapTools->moduleInstalled() && $this->sitemap_module_clear_cache_on_save) {
       $result = $markupSitemapTools->clearSitemapCache();
 
-      if ($result) {
-        $this->logMsg("MarkupSitemap cache cleared");
-      }
+      $this->logmsg($result ? 'Sitemap cache cleared' : 'Failed to clear sitemap cache');
     }
   }
 }

@@ -10,11 +10,17 @@ class MarkupSitemapTools extends Wire {
    * Name of cache where sitemaps are stored
    * @var string
    */
-  private $sitemapCacheName = 'MarkupCache/MarkupSitemap';
+  private $sitemapCachePath = 'MarkupCache/MarkupSitemap';
+
+  /**
+   * Key used to identify MarkupSitemap cache
+   * @var string
+   */
+  private $cacheKey = 'MarkupSitemap';
 
   /**
    * Clears the sitemap cache for MarkupSitemap
-   * @return bool  Success/fail
+   * @return bool Success/Fail
    */
   public function clearSitemapCache(): bool {
     // Always check in case this method was called without checking if
@@ -24,20 +30,23 @@ class MarkupSitemapTools extends Wire {
 
     // If the module is presen, check if method is availablet
     if ($moduleInstalled) {
-      $cacheCleared = $this->clearSitemapCacheByModuleMethod();
-    }
+      $cacheClearMethodExists = $this->cacheClearMethodExists();
 
-    // If method is not available, then attempt to destroy it directly
-    if (!$cacheClearMethodExists || !$cacheCleared) {
-      $cacheCleared = $this->clearSitemapCacheDirectly();
+      if ($cacheClearMethodExists) {
+        $cacheCleared = $this->clearSitemapCacheByModuleMethod();
+      }
+
+      if (!$cacheClearMethodExists) {
+        $cacheCleared = $this->clearSitemapCacheDirectly();
+      }
     }
 
     return $cacheCleared;
   }
 
   /**
-   * Returns
-   * @return [type] [description]
+   * Determines whether the MarkupSitemap module is installed
+   * @return bool
    */
   public function moduleInstalled(): bool {
     return $this->modules->isInstalled('MarkupSitemap');
@@ -48,38 +57,62 @@ class MarkupSitemapTools extends Wire {
   /////////////////////////
 
   /**
-   * Attempts to call the removeSitemapCache method if it exists in the module
+   * Calls cache clear method from module.
+   * NOTE: This does not check for the existence of the module or availability of the method, ensure
+   *       that both of these conditions are met before calling this method.
    * @return bool  Success/fail
    */
   private function clearSitemapCacheByModuleMethod(): bool {
-    $moduleInstalled = $this->moduleInstalled();
-    $cacheCleared = false;
-
-    if ($moduleInstalled) {
-      $markupSitemapModule = $this->modules->get('MarkupSitemap');
-      $cacheClearMethodExists = method_exists($markupSitemapModule, 'removeSitemapCache');
-
-      $cacheCleare = $markupSitemapModule->removeSitemapCache();
-    }
-
-    return $cacheCleared;
+    return $this->modules->get('MarkupSitemap')->removeSitemapCache();
   }
 
   /**
    * Manually clears the markup cache
-   * This replicates the cache clearing functionality of MarkupSitemap
-   * @return bool  Success/fail
+   * NOTE: This does not check for the existence of the module or availability of the method, ensure
+   *       that both of these conditions are met before calling this method.
+   * @return bool Success/Fail
    */
   private function clearSitemapCacheDirectly(): bool {
-    $removed = false;
+    $moduleConfig = $this->modules->getModuleConfigData('MarkupSitemap');
+    $cacheMethod = $moduleConfig->cache_method ?: 'MarkupCache';
 
-    try {
-      $cachePath = $this->config->paths->cache . $this->$sitemapCacheName;
-      $removed = (bool) CacheFile::removeAll($cachePath, true);
-    } catch (\Exception $e) {
-      $removed = false;
+    // Attempt to fetch sitemap from cache
+    $cache = $moduleConfig->cache_method === 'WireCache' ? $this->cache : $this->modules->MarkupCache;
+
+    // Checks if sitemap is cached by geting data from cache if it exists.
+    $sitemapIsCached = !!$cache->get($this->cacheKey);
+
+    if ($sitemapIsCached) {
+      // If WireCache, destroy it
+      if ($cacheMethod === 'WireCache') {
+        $removed = (bool) $cache->deleteFor($this->cacheKey);
+      }
+
+      // If MarkupCache, destroy it
+      if ($cacheMethod === 'MarkupCache') {
+        try {
+          $removed = (bool) CacheFile::removeAll($this->cachePath, true);
+        } catch (\Exception $e) {
+          $removed = false;
+        }
+      }
+    }
+
+    // If the cache doesn't exist, return true since, for all intents and purposes, it was cleared
+    if (!$sitemapIsCached) {
+      $removed = true;
     }
 
     return $removed;
+  }
+
+  /**
+   * Checks for existence of accessible module method that clears the sitemap cache
+   * @return bool
+   */
+  private function cacheClearMethodExists(): bool {
+    $markupSitemapModule = $this->modules->get('MarkupSitemap');
+
+    return method_exists($markupSitemapModule, 'removeSitemapCache');
   }
 }

@@ -1,29 +1,24 @@
-# ProcessWire Auto Sitemap Submit Module
-**This module is still in development is incomplete. Please wait for a formal release before using.**
-This module tracks changes to pages that have an effect on a website's sitemap and then notifies
-(pings) search engines. These events include:
+# ProcessWire Sitemap Submit Module
+**This module is still in development/testing. Use with caution and test!.**
+This module submits (pings) search engines when changes to pages will affect a sitemap to notify them that the sitemap should be re-parsed. These events include:
 
-- New page is published
-- Existing page is saved, published, unpublished, moved, deleted, restored
+- New page is published - New URL created
+- Existing page is unpublished
+- Existing page is saved
+- Existing page is moved
+- Existing page is deleted
+- Existing page is restored
 
+Module also:
 - Checks if sitemap.xml exists
-- Results of pings are logged to auto-sitemap-submit log
-- Warning message provided if page is published or saved and sitemap.xml is not found
+- Logs submissions to sitemap-submit log
 - Sitemap URL can be specified, defaults to site-url.com/sitemap.xml
 - Templates can be excluded for pages created/saved that should not be pinged
 - Hidden pages do not trigger a ping.
 - Currently supports Bing and Google
 
 ## Recommended companion module:
-This module automatically generates a sitemap.xml URL. Miltilanguage capable.
-[MarkupSitemap](https://processwire.com/modules/markup-sitemap/)
+MarkupSitemap automatically generates a multi-language capable sitemap.xml file. ProcessSitemapSubmit is aware of this module when installed and handles clearing cached sitemaps to ensure that search engines always see the latest changes. More info available here [MarkupSitemap](https://processwire.com/modules/markup-sitemap/).
 
 ## Roadmap
-In November 2021 Google announced that they are reviewing the [IndexNow](https://www.indexnow.org)
-protocol. This is a standard that has already been adopted by Bing and Yandex. If this is adopted
-by Google it will be worth updating the module with new abilities, namely:
-- When a tracked page event occurs, send sitemap.xml ping
-- If the tracked page event results in content indexable changes (not deleted, unpublished, etc.), also send a
-  PageIndex hit.
-
-Google being Google, we won't have more information on this until it actually happens, if it does...
+In November 2021 Google announced that they are reviewing the [IndexNow](https://www.indexnow.org) protocol. This is a standard that has already been adopted by Bing and Yandex. If this is adopted by Google it will be worth updating the module with the ability to use this method.
