@@ -1,3 +1,7 @@
+# THIS MODULE IS RETIRED
+Google has shut down their sitemap ping endpoint. Sitemaps submissions are now managed via Google Search Console.
+
+
 # ProcessWire Sitemap Submit Module
 **This module is still in development/testing. Use with caution and test!.**
 This module submits (pings) search engines when changes to pages will affect a sitemap to notify them that the sitemap should be re-parsed. These events include:
